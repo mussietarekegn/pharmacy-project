@@ -47,10 +47,25 @@
 
 <div class="nav-links">
     <a href="{% url 'add_medicine' %}" class="btn">Add Medicine</a>
-    <a href="#" class="btn">Manage Medicines</a> <!-- Week 3 -->
+    <a href="{% url 'medicine_list' %}" class="btn">Manage Medicines</a>
     <a href="{% url 'update_profile' %}" class="btn">Update Profile</a>
     <a href="{% url 'logout' %}" class="btn" style="background: red;">Logout</a>
 </div>
+
+
+<h3>Your Medicines</h3>
+
+{% if medicines %}
+    <ul>
+        {% for med in medicines %}
+            <li>
+                <strong>{{ med.name }}</strong> — ${{ med.price }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No medicines added yet.</p>
+{% endif %}
 
 </body>
 </html>

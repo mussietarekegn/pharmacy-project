@@ -141,7 +141,12 @@ def pharmacy_dashboard(request):
     if not profile.is_verified:
         return render(request, 'member/not_verified.html')
 
-    return render(request, 'member/pharmacy_dashboard.html', {'profile': profile})
+    medicines = profile.medicine_set.all()
+
+    return render(request, 'member/pharmacy_dashboard.html', {
+        'profile': profile,
+        'medicines': medicines
+    })
 
 # -----------------------------
 # Add Medicine
