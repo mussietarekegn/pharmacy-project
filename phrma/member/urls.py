@@ -1,24 +1,25 @@
 from django.urls import path
-from . import views
+from .views import *
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path('register/user/', views.customer_register, name='register_customer'),
-    path('register/pharmacy/', views.pharmacy_register, name='register_pharmacy'),
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('pharmacy/verify/list/', views.verify_pharmacy_list, name='verify_pharmacy_list'),
-    path('pharmacy/approve/<int:profile_id>/', views.approve_pharmacy, name='approve_pharmacy'),
-    path('dashboard/', views.pharmacy_dashboard, name='dashboard'),
-    path('medicine/add/', views.add_medicine, name='add_medicine'),
-    path('customer/welcome/', views.customer_welcome, name='customer_welcome'),  # new
-    path('pharmacy/update/', views.update_profile, name='update_profile'),
-    path('medicine/list/', views.medicine_list, name='medicine_list'),
-    path('medicine/<int:medicine_id>/', views.medicine_detail, name='medicine_detail'),
-    path('medicine/<int:medicine_id>/edit/', views.edit_medicine, name='edit_medicine'),
-    path('medicine/<int:medicine_id>/delete/', views.delete_medicine, name='delete_medicine'),
-    path('customer/profile/update/', views.update_customer_profile, name='update_customer_profile'),
+    path("", HomeView.as_view(), name="home"),
+    path("register/user/", CustomerRegisterView.as_view(), name="register_customer"),
+    path("register/pharmacy/", PharmacyRegisterView.as_view(), name="register_pharmacy"),
+    path("login/", login_view, name="login"),
+    path("logout/", logout_view, name="logout"),
 
+    path("pharmacy/verify/list/", verify_pharmacy_list, name="verify_pharmacy_list"),
+    path("pharmacy/approve/<int:profile_id>/", approve_pharmacy, name="approve_pharmacy"),
 
+    path("dashboard/", PharmacyDashboardView.as_view(), name="dashboard"),
+    path("medicine/add/", MedicineCreateView.as_view(), name="add_medicine"),
+    path("medicine/<int:medicine_id>/edit/", MedicineUpdateView.as_view(), name="edit_medicine"),
+    path("medicine/<int:medicine_id>/delete/", MedicineDeleteView.as_view(), name="delete_medicine"),
+    path("medicine/<int:medicine_id>/", MedicineDetailView.as_view(), name="medicine_detail"),
+    path("medicine/list/", MedicineListView.as_view(), name="medicine_list"),
+    path("pharmacy/update/", PharmacyProfileUpdateView.as_view(), name="update_profile"),
+
+    path("customer/welcome/", CustomerWelcomeView.as_view(), name="customer_welcome"),
+    path("customer/profile/update/", CustomerProfileUpdateView.as_view(), name="update_customer_profile"),
+     path('not_verified/', not_verified_view, name='not_verified'),
 ]
-
