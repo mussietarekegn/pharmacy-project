@@ -1,0 +1,13 @@
+<h2>Available Medicines</h2>
+
+<ul>
+    {% for med in medicines %}
+        <li>
+            <strong>{{ med.name }}</strong> — ${{ med.price }}
+            <br>
+            <small>From: {{ med.owner.pharmacy_name }}</small>
+        </li>
+    {% empty %}
+        <p>No medicines found.</p>
+    {% endfor %}
+</ul>

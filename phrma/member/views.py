@@ -7,7 +7,7 @@ from .forms import (
     PharmacyOwnerForm,
     UserRegistrationForm
 )
-from .models import CustomUser, PharmacyOwnerProfile
+from .models import CustomUser, PharmacyOwnerProfile,Medicine
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -184,3 +184,7 @@ def customer_welcome(request):
     if request.user.role != 'customer':
         return redirect('login')
     return render(request, 'member/customer_welcome.html', {'user': request.user})
+
+def medicine_list(request):
+    medicines = Medicine.objects.all()
+    return render(request, 'member/medicine_list.html', {'medicines': medicines})
