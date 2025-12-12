@@ -14,6 +14,10 @@ urlpatterns = [
     path('customer/welcome/', views.customer_welcome, name='customer_welcome'),  # new
     path('pharmacy/update/', views.update_profile, name='update_profile'),
     path('medicine/list/', views.medicine_list, name='medicine_list'),
+    path('medicine/<int:medicine_id>/', views.medicine_detail, name='medicine_detail'),
+    path('medicine/<int:medicine_id>/edit/', views.edit_medicine, name='edit_medicine'),
+    path('medicine/<int:medicine_id>/delete/', views.delete_medicine, name='delete_medicine'),
+
 
 ]
 

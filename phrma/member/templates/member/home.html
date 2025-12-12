@@ -1,11 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>This is home page</h1>
-</body>
-</html>
+{% extends "member/base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="text-center p-5 mb-4 shadow rounded-4"
+         style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;">
+
+        <h1 class="fw-bold mb-3" style="font-size: 2.5rem;">Welcome to Pharma+</h1>
+
+        <p class="mb-0" style="font-size: 1.15rem;">
+            Your trusted platform for discovering essential medicines <br>
+            and connecting directly with verified pharmacies around you.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow p-4 rounded-4">
+
+        <h3 class="text-center fw-bold mb-3">What Pharma+ Offers</h3>
+
+        <p class="text-muted text-center" style="font-size: 1.05rem;">
+            Pharma+ is designed to bridge the gap between people searching for medicine
+            and pharmacies that have them in stock. Instead of walking from store to store,
+            you can instantly browse available medicines, compare details, and find the
+            nearest pharmacy that has exactly what you need.
+        </p>
+
+        <p class="text-muted text-center" style="font-size: 1.05rem;">
+            Whether you're a customer looking for reliable access to medicine or a pharmacy
+            owner wanting to reach more people, Pharma+ makes the process simple, fast,
+            and convenient. Our goal is to ensure accessibility, reduce time wasted, and
+            create a seamless experience for everyone.
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,29 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Pharmacy Registration</title>
-</head>
-<body>
+{% extends "member/base.html" %}
 
-<h2>Pharmacy Registration</h2>
+{% block content %}
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="container mt-5 col-md-6 col-lg-5">
 
-    <h3>User Account</h3>
-    {{ user_form.as_p }}
-    {% if user_form.errors %}
-        <div style="color:red;">{{ user_form.errors }}</div>
-    {% endif %}
+    <div class="text-end mb-3">
+        <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm">Home</a>
+    </div>
 
-    <h3>Pharmacy Details</h3>
-    {{ pharmacy_form.as_p }}
-    {% if pharmacy_form.errors %}
-        <div style="color:red;">{{ pharmacy_form.errors }}</div>
-    {% endif %}
+    <div class="card shadow-lg rounded-4 p-4">
 
-    <button type="submit">Register</button>
-</form>
+        <h2 class="text-center fw-bold mb-4">Pharmacy Registration</h2>
 
-</body>
-</html>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <h4 class="fw-semibold mb-3">User Account</h4>
+            {{ user_form.as_p }}
+            {% if user_form.errors %}
+                <div class="alert alert-danger rounded-3 py-2 px-3">
+                    {{ user_form.errors }}
+                </div>
+            {% endif %}
+
+            <h4 class="fw-semibold mt-4 mb-3">Pharmacy Details</h4>
+            {{ pharmacy_form.as_p }}
+            {% if pharmacy_form.errors %}
+                <div class="alert alert-danger rounded-3 py-2 px-3">
+                    {{ pharmacy_form.errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary w-100 py-2 mt-3 rounded-3 fw-semibold">
+                Register Pharmacy
+            </button>
+
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+            Already have an account?  
+            <a href="{% url 'login' %}">Login</a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

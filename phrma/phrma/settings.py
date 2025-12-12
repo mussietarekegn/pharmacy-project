@@ -40,9 +40,6 @@ INSTALLED_APPS = [
 
     #our apps
     'member',
-    'pharmacy',
-    'medicine',
-    'search',
 ]
 
 MIDDLEWARE = [

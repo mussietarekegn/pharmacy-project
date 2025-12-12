@@ -10,54 +10,43 @@ from .forms import (
 from .models import CustomUser, PharmacyOwnerProfile,Medicine
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 
-# -----------------------------
-# Helper Functions
-# -----------------------------
+
 def home(request):
     return render(request, "member/home.html")
 
 def admin_required(user):
     return user.is_superuser
 
-# -----------------------------
-# Customer Registration
-# -----------------------------
 def customer_register(request):
     if request.method == "POST":
         form = CustomerRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.role = 'customer'  # explicitly set role
+            user.role = 'customer'  
             user.save()
-            # Redirect to login page after successful registration
             return redirect('login')
     else:
         form = CustomerRegisterForm()
     
     return render(request, 'member/customer_register.html', {'form': form})
 
-# -----------------------------
-# Pharmacy Registration
-# -----------------------------
 def pharmacy_register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
         pharmacy_form = PharmacyOwnerForm(request.POST, request.FILES)
 
         if user_form.is_valid() and pharmacy_form.is_valid():
-            # Save user
             user = user_form.save(commit=False)
             user.role = 'pharmacy_owner'
             user.save()
 
-            # Save pharmacy profile
             profile = pharmacy_form.save(commit=False)
             profile.user = user
-            profile.is_verified = False
-            profile.save()
+            profile.is_verified = False  
 
-            # Redirect to login page
+            messages.info(request, "Your pharmacy account is registered. Please wait for admin approval before logging in.")
             return redirect('login')
     else:
         user_form = UserRegistrationForm()
@@ -69,18 +58,15 @@ def pharmacy_register(request):
     })
 
 
-# -----------------------------
-# Login / Logout
-# -----------------------------
 def login_view(request):
     if request.user.is_authenticated:
-        # Redirect based on role
         if request.user.role == 'pharmacy_owner':
-            if hasattr(request.user, 'pharmacyownerprofile') and not request.user.pharmacyownerprofile.is_verified:
+            profile = getattr(request.user, 'pharmacyownerprofile', None)
+            if profile and not profile.is_verified:
                 return render(request, 'member/not_verified.html')
             return redirect('dashboard')
         elif request.user.role == 'customer':
-            return redirect('customer_welcome')  # new view for customer
+            return redirect('customer_welcome')
         return redirect('home')
 
     if request.method == "POST":
@@ -93,15 +79,19 @@ def login_view(request):
             if user.role != role:
                 form.add_error(None, "Selected role does not match your account role.")
             else:
+
+                if role == 'pharmacy_owner':
+                    profile = getattr(user, 'pharmacyownerprofile', None)
+                    if profile and not profile.is_verified:
+                        messages.warning(request, "Your pharmacy account is not verified yet. Please wait for admin approval.")
+                        return render(request, 'member/not_verified.html')
+
                 login(request, user)
 
                 if role == 'pharmacy_owner':
-                    if not user.pharmacyownerprofile.is_verified:
-                        logout(request)
-                        return render(request, 'member/not_verified.html')
                     return redirect('dashboard')
                 elif role == 'customer':
-                    return redirect('customer_welcome')  # redirect customers
+                    return redirect('customer_welcome')
                 else:
                     return redirect('home')
     else:
@@ -114,9 +104,7 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
-# -----------------------------
-# Admin: Verify Pharmacies
-# -----------------------------
+
 @user_passes_test(admin_required)
 def verify_pharmacy_list(request):
     unverified = PharmacyOwnerProfile.objects.filter(is_verified=False)
@@ -129,9 +117,6 @@ def approve_pharmacy(request, profile_id):
     profile.save()
     return redirect('verify_pharmacy_list')
 
-# -----------------------------
-# Pharmacy Dashboard
-# -----------------------------
 @login_required
 def pharmacy_dashboard(request):
     if request.user.role != 'pharmacy_owner':
@@ -148,9 +133,6 @@ def pharmacy_dashboard(request):
         'medicines': medicines
     })
 
-# -----------------------------
-# Add Medicine
-# -----------------------------
 @login_required
 def add_medicine(request):
     if request.user.role != 'pharmacy_owner' or not request.user.pharmacyownerprofile.is_verified:
@@ -162,15 +144,14 @@ def add_medicine(request):
             medicine = form.save(commit=False)
             medicine.owner = request.user.pharmacyownerprofile
             medicine.save()
+
+            messages.success(request, "Medicine added successfully!")
             return redirect('dashboard')
     else:
         form = MedicineForm()
 
     return render(request, 'member/add_medicine.html', {'form': form})
 
-# -----------------------------
-# Update Pharmacy Profile
-# -----------------------------
 @login_required
 def update_profile(request):
     profile = request.user.pharmacyownerprofile
@@ -193,3 +174,58 @@ def customer_welcome(request):
 def medicine_list(request):
     medicines = Medicine.objects.all()
     return render(request, 'member/medicine_list.html', {'medicines': medicines})
+@login_required
+def customer_welcome(request):
+    if request.user.role != 'customer':
+        return redirect('login')
+
+    query = request.GET.get('q', '')
+
+    if query:
+        medicines = Medicine.objects.filter(name__icontains=query)
+    else:
+        medicines = Medicine.objects.all()
+
+    context = {
+        'medicines': medicines,
+        'query': query,
+    }
+    return render(request, 'member/customer_welcome.html', context)
+
+
+@login_required
+def medicine_detail(request, medicine_id):
+    medicine = get_object_or_404(Medicine, id=medicine_id)
+    return render(request, 'member/medicine_detail.html', {'medicine': medicine})
+
+@login_required
+def edit_medicine(request, medicine_id):
+    medicine = get_object_or_404(Medicine, id=medicine_id)
+
+    if medicine.owner != request.user.pharmacyownerprofile:
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        form = MedicineForm(request.POST, request.FILES, instance=medicine)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Medicine updated successfully!")
+            return redirect('dashboard')
+    else:
+        form = MedicineForm(instance=medicine)
+
+    return render(request, 'member/edit_medicine.html', {'form': form, 'medicine': medicine})
+
+@login_required
+def delete_medicine(request, medicine_id):
+    medicine = get_object_or_404(Medicine, id=medicine_id)
+
+    if medicine.owner != request.user.pharmacyownerprofile:
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        medicine.delete()
+        messages.success(request, "Medicine deleted successfully!")
+        return redirect('dashboard')
+
+    return render(request, 'member/delete_medicine_confirm.html', {'medicine': medicine})

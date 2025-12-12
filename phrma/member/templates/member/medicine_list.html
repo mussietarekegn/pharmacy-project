@@ -1,29 +1,57 @@
-<h2>Available Medicines</h2>
+{% extends "member/base.html" %}
 
-<ul>
-    {% for med in medicines %}
-        <li style="margin-bottom: 20px; list-style: none;">
+{% block content %}
 
-            <!-- Medicine Image -->
-            <img src="{{ med.image.url }}" width="120" style="border-radius: 5px;">
+<div class="container mt-4">
 
-            <br>
+    <h2 style="text-align: center; margin-bottom: 30px; font-weight: 700; letter-spacing: 1px;">
+        Available Medicines
+    </h2>
 
-            <!-- Name + Price -->
-            <strong>{{ med.name }}</strong> — ${{ med.price }}
+    {% if medicines %}
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        ">
 
-            <br>
+            {% for med in medicines %}
+            <div style="
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                text-align: center;
+                transition: 0.3s;
+            ">
 
-            <!-- Description -->
-            <small>{{ med.description }}</small>
+                <img src="{{ med.image.url }}" 
+                     style="width: 120px; height:120px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
 
-            <br>
+                <h4 style="font-weight: 600; margin-bottom: 5px;">
+                    {{ med.name }}
+                </h4>
 
-            <!-- Pharmacy Name -->
-            <small>From: {{ med.owner.pharmacy_name }}</small>
+                <p style="margin: 0; font-size: 17px; color: #28a745; font-weight: 600;">
+                    ${{ med.price }}
+                </p>
 
-        </li>
-    {% empty %}
-        <p>No medicines found.</p>
-    {% endfor %}
-</ul>
+                <p style="font-size: 14px; color: #555; margin-top: 10px;">
+                    {{ med.description }}
+                </p>
+
+                <p style="font-size: 13px; color: #888; margin-top: 10px;">
+                    <strong>Pharmacy:</strong> {{ med.owner.pharmacy_name }}
+                </p>
+
+            </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <p style="text-align:center; margin-top: 20px;">No medicines found.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

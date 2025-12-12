@@ -4,9 +4,6 @@ from django.contrib.auth.models import AbstractUser
 from PIL import Image
 import os
 
-# -----------------------------
-# Custom User Model
-# -----------------------------
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
         ('customer', 'Customer'),
@@ -19,9 +16,6 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-# -----------------------------
-# Pharmacy Owner Profile
-# -----------------------------
 class PharmacyOwnerProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pharmacy_name = models.CharField(max_length=200)
@@ -34,9 +28,6 @@ class PharmacyOwnerProfile(models.Model):
         return f"{self.pharmacy_name} - {self.user.username}"
 
 
-# -----------------------------
-# Medicine Model
-# -----------------------------
 class Medicine(models.Model):
     owner = models.ForeignKey(PharmacyOwnerProfile, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -48,10 +39,12 @@ class Medicine(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    expiry_date = models.DateField(null=True, blank=True)  # NEW
+    location = models.CharField(max_length=255, blank=True, null=True)  # NEW
+
     def __str__(self):
         return self.name
 
-    # Optimize uploaded image
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:

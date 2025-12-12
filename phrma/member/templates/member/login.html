@@ -1,40 +1,58 @@
-<form method="POST" class="p-4 border rounded bg-white shadow-sm">
-    {% csrf_token %}
+{% extends "member/base.html" %}
 
-    <!-- Display errors -->
-    {% if form.errors %}
-        <div class="alert alert-danger">
-            Invalid username or password.
-        </div>
-    {% endif %}
+{% block content %}
 
-    <!-- Select Role -->
-    <label for="role" class="form-label"><strong>Login as:</strong></label>
-    <select name="role" id="role" class="form-select mb-3">
-        <option value="customer">Customer</option>
-        <option value="pharmacy_owner">Pharmacy Owner</option>
-    </select>
+<div class="container mt-5 col-md-5 col-lg-4">
 
-    <!-- Username -->
-    <div class="mb-3">
-        <label class="form-label">{{ form.username.label }}</label>
-        {{ form.username }}
+    <div class="text-end mb-3">
+        <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm">Home</a>
     </div>
 
-    <!-- Password -->
-    <div class="mb-3">
-        <label class="form-label">{{ form.password.label }}</label>
-        {{ form.password }}
+    <div class="p-4 bg-white shadow-lg rounded-4">
+
+        <h2 class="text-center fw-bold mb-4">Login</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="alert alert-danger text-center">
+                    Invalid username or password.
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label for="role" class="form-label fw-semibold">Login as:</label>
+                <select name="role" id="role" class="form-select rounded-3">
+                    <option value="customer">Customer</option>
+                    <option value="pharmacy_owner">Pharmacy Owner</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.username.label }}</label>
+                {{ form.username }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">{{ form.password.label }}</label>
+                {{ form.password }}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-semibold">
+                Login
+            </button>
+
+            <p class="text-center mt-3 mb-0">
+                Don’t have an account?
+                <br>
+                <a href="{% url 'register_customer' %}">Register as Customer</a> |
+                <a href="{% url 'register_pharmacy' %}">Register as Pharmacy Owner</a>
+            </p>
+        </form>
+
     </div>
 
-    <!-- Login Button -->
-    <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
+</div>
 
-    <!-- Registration Links -->
-    <p class="text-center mt-3">
-        Don’t have an account?
-        <br>
-        <a href="{% url 'register_customer' %}">Register as Customer</a> |
-        <a href="{% url 'register_pharmacy' %}">Register as Pharmacy Owner</a>
-    </p>
-</form>
+{% endblock %}
