@@ -152,6 +152,18 @@ def add_medicine(request):
 
     return render(request, 'member/add_medicine.html', {'form': form})
 
+@login_required
+def update_profile(request):
+    profile = request.user.pharmacyownerprofile
+    if request.method == 'POST':
+        form = PharmacyProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = PharmacyProfileForm(instance=profile)
+
+    return render(request, 'member/update_profile.html', {'form': form})
 
 @login_required
 def customer_welcome(request):
