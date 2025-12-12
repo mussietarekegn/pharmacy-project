@@ -1,32 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<form method="POST" class="p-4 border rounded bg-white shadow-sm">
+    {% csrf_token %}
 
-<body class="bg-light">
-<div class="container col-md-4 mt-5">
-
-    <h2 class="text-center mb-4">Login</h2>
-
+    <!-- Display errors -->
     {% if form.errors %}
-        <div class="alert alert-danger">Invalid username or password.</div>
+        <div class="alert alert-danger">
+            Invalid username or password.
+        </div>
     {% endif %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <!-- Select Role -->
+    <label for="role" class="form-label"><strong>Login as:</strong></label>
+    <select name="role" id="role" class="form-select mb-3">
+        <option value="customer">Customer</option>
+        <option value="pharmacy_owner">Pharmacy Owner</option>
+    </select>
 
-        <button class="btn btn-primary w-100 mt-3">Login</button>
-    </form>
+    <!-- Username -->
+    <div class="mb-3">
+        <label class="form-label">{{ form.username.label }}</label>
+        {{ form.username }}
+    </div>
 
+    <!-- Password -->
+    <div class="mb-3">
+        <label class="form-label">{{ form.password.label }}</label>
+        {{ form.password }}
+    </div>
+
+    <!-- Login Button -->
+    <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
+
+    <!-- Registration Links -->
     <p class="text-center mt-3">
         Don’t have an account?
-        <a href="{% url 'register_customer' %}">Register as Customer</a><br>
+        <br>
+        <a href="{% url 'register_customer' %}">Register as Customer</a> |
         <a href="{% url 'register_pharmacy' %}">Register as Pharmacy Owner</a>
     </p>
-
-</div>
-</body>
-</html>
+</form>

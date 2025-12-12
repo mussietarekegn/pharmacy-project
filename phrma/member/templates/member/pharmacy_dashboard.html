@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pharmacy Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .nav-links {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Welcome, {{ profile.user.username }}</h2>
+
+<!-- SUCCESS / ERROR MESSAGES -->
+{% if messages %}
+    {% for msg in messages %}
+        <p class="success">{{ msg }}</p>
+    {% endfor %}
+{% endif %}
+
+<h3>Your Pharmacy Details</h3>
+
+<p><strong>Pharmacy Name:</strong> {{ profile.pharmacy_name }}</p>
+<p><strong>Location:</strong> {{ profile.location }}</p>
+<p><strong>Phone:</strong> {{ profile.phone }}</p>
+
+<div class="nav-links">
+    <a href="{% url 'add_medicine' %}" class="btn">Add Medicine</a>
+    <a href="#" class="btn">Manage Medicines</a> <!-- Week 3 -->
+    <a href="{% url 'update_profile' %}" class="btn">Update Profile</a>
+    <a href="{% url 'logout' %}" class="btn" style="background: red;">Logout</a>
+</div>
+
+</body>
+</html>
