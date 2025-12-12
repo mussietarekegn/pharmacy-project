@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from .models import CustomUser,PharmacyOwnerProfile,Medicine
 
 class CustomerRegisterForm(UserCreationForm):
@@ -30,3 +30,9 @@ class PharmacyOwnerForm(forms.ModelForm):
     class Meta:
         model = PharmacyOwnerProfile
         exclude = ['user', 'is_verified']   
+
+class CustomerProfileForm(UserChangeForm):
+    # Only allow the user to update their username, email, etc.
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email']
