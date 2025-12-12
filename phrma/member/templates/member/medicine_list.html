@@ -2,10 +2,26 @@
 
 <ul>
     {% for med in medicines %}
-        <li>
-            <strong>{{ med.name }}</strong> — ${{ med.price }}
+        <li style="margin-bottom: 20px; list-style: none;">
+
+            <!-- Medicine Image -->
+            <img src="{{ med.image.url }}" width="120" style="border-radius: 5px;">
+
             <br>
+
+            <!-- Name + Price -->
+            <strong>{{ med.name }}</strong> — ${{ med.price }}
+
+            <br>
+
+            <!-- Description -->
+            <small>{{ med.description }}</small>
+
+            <br>
+
+            <!-- Pharmacy Name -->
             <small>From: {{ med.owner.pharmacy_name }}</small>
+
         </li>
     {% empty %}
         <p>No medicines found.</p>
