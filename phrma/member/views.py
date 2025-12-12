@@ -5,7 +5,8 @@ from .forms import (
     MedicineForm,
     PharmacyProfileForm,
     PharmacyOwnerForm,
-    UserRegistrationForm
+    UserRegistrationForm,
+    CustomerProfileForm
 )
 from .models import CustomUser, PharmacyOwnerProfile,Medicine
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -229,3 +230,19 @@ def delete_medicine(request, medicine_id):
         return redirect('dashboard')
 
     return render(request, 'member/delete_medicine_confirm.html', {'medicine': medicine})
+
+@login_required
+def update_customer_profile(request):
+    if request.user.role != 'customer':
+        return redirect('login')
+
+    if request.method == 'POST':
+        form = CustomerProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated successfully!")
+            return redirect('customer_welcome')
+    else:
+        form = CustomerProfileForm(instance=request.user)
+
+    return render(request, 'member/update_customer_profile.html', {'form': form})
