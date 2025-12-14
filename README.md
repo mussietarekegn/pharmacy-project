@@ -1,4 +1,4 @@
-# 🏥 **Pharmacy Finder Platform ([https://github.com/meraman750/Alx_DjangoLearnLab.git](https://pharmacy-app-niai.onrender.com/))**
+# 🏥 **Pharmacy Finder Platform (https://github.com/meraman750/Alx_DjangoLearnLab.git](https://pharmacy-app-niai.onrender.com/](https://pharmacy-app-niai.onrender.com)**
 
 ## 📌 Project Overview
 
