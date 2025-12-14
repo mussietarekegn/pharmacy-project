@@ -21,5 +21,5 @@ urlpatterns = [
 
     path("customer/welcome/", CustomerWelcomeView.as_view(), name="customer_welcome"),
     path("customer/profile/update/", CustomerProfileUpdateView.as_view(), name="update_customer_profile"),
-     path('not_verified/', not_verified_view, name='not_verified'),
+    path('not_verified/', not_verified_view, name='not_verified'),
 ]
