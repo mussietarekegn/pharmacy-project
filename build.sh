@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 set -o errexit
 
+# 1️⃣ Install dependencies
 pip install -r requirements.txt
+
+# 2️⃣ Collect static files
 python manage.py collectstatic --noinput
+
+# 3️⃣ Apply migrations
 python manage.py migrate
+
+# 4️⃣ Create superuser automatically if it doesn't exist
+echo "from django.contrib.auth import get_user_model; \
+User = get_user_model(); \
+if not User.objects.filter(username='hp').exists(): \
+    User.objects.create_superuser('hp', 'moss@gmail.com', 'Moss123@')" \
+| python manage.py shell
