@@ -1,0 +1,46 @@
+{% extends 'member/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5 col-md-6 col-lg-5">
+
+    <!-- Page Header -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Update Your Profile</h2>
+        <p class="text-muted">Edit your account details below</p>
+    </div>
+
+    <!-- Update Form Card -->
+    <div class="card shadow-lg rounded-4 p-4">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Only show username and email -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Username</label>
+                {{ form.username }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Email</label>
+                {{ form.email }}
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary w-50 py-2 fw-semibold rounded-3">
+                    Save Changes
+                </button>
+                <a href="{% url 'customer_welcome' %}" class="btn btn-secondary w-50 py-2 fw-semibold rounded-3">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "member/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    {% if user.is_authenticated %}
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
+        </div>
+    {% endif %}
+
+    <div class="card shadow-lg p-4 mb-4 text-center border-0"
+         style="border-radius: 16px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;">
+        <h2 class="fw-bold">Welcome, {{ user.username }}! 👋</h2>
+        <p class="mb-3">You are logged in as a <strong>customer</strong>.</p>
+        <a href="{% url 'update_customer_profile' %}" class="btn btn-info fw-semibold px-4 py-2 rounded-3">
+            Update Profile
+        </a>
+    </div>
+
+    <form method="GET" class="mb-4">
+        <div class="input-group" style="border-radius: 10px; overflow: hidden;">
+            <input type="text" name="q" class="form-control" placeholder="Search medicines by name..."
+                   value="{{ query }}">
+            <button type="submit" class="btn btn-primary px-4">
+                Search
+            </button>
+        </div>
+    </form>
+
+    <div class="row">
+        {% if medicines %}
+            {% for med in medicines %}
+                <div class="col-md-4 mb-4">
+                    <a href="{% url 'medicine_detail' med.id %}" style="text-decoration:none; color:inherit;">
+                        <div class="card border-0 shadow-sm h-100 hover-card"
+                             style="border-radius: 14px; transition: 0.25s;">
+
+                            {% if med.image %}
+                                <img src="{{ med.image.url }}" class="card-img-top"
+                                     style="height:200px; object-fit:cover; border-radius: 14px 14px 0 0;">
+                            {% else %}
+                                <img src="https://via.placeholder.com/300x200?text=No+Image" 
+                                     class="card-img-top"
+                                     style="border-radius: 14px 14px 0 0;">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">{{ med.name }}</h5>
+
+                                <p class="text-muted mb-1">
+                                    <strong class="text-dark">Price:</strong> ${{ med.price }}
+                                </p>
+                                <p class="text-muted mb-1">
+                                    <strong class="text-dark">Stock:</strong> {{ med.stock }}
+                                </p>
+                                <p class="text-muted mb-1">
+                                    <strong class="text-dark">Location:</strong> {{ med.location }}
+                                </p>
+                                <p class="text-muted mb-0">
+                                    <strong class="text-dark">Expiry:</strong> {{ med.expiry_date }}
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            {% if query %}
+                <p class="text-danger text-center">No medicines found for "<strong>{{ query }}</strong>".</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .hover-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+    }
+</style>
+
+{% endblock %}

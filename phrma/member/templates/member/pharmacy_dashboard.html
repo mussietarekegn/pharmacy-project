@@ -1,0 +1,82 @@
+{% extends 'member/base.html' %}
+
+{% block title %}Pharmacy Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h2 class="fw-bold mb-2">Welcome, {{ profile.user.username }} 👋</h2>
+        <p class="text-muted mb-0">Here’s an overview of your pharmacy account.</p>
+    </div>
+
+    <div class="card shadow-sm rounded-4 p-4 mb-4">
+        <h3 class="fw-semibold mb-3">Your Pharmacy Details</h3>
+        <p><strong>Pharmacy Name:</strong> {{ profile.pharmacy_name }}</p>
+        <p><strong>Location:</strong> {{ profile.location }}</p>
+        <p><strong>Phone:</strong> {{ profile.phone }}</p>
+    </div>
+
+    {% if messages %}
+        <div class="mb-3">
+            {% for msg in messages %}
+                <div class="alert alert-success rounded-3 py-2 px-3">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a href="{% url 'add_medicine' %}" class="btn btn-primary fw-semibold px-4 py-2 rounded-3">Add Medicine</a>
+        <a href="{% url 'update_profile' %}" class="btn btn-warning fw-semibold px-4 py-2 rounded-3">Update Profile</a>
+        <a href="{% url 'logout' %}" class="btn btn-danger fw-semibold px-4 py-2 rounded-3">Logout</a>
+    </div>
+
+    <div class="card shadow-sm rounded-4 p-4">
+        <h3 class="fw-semibold mb-3">Your Medicines</h3>
+
+        {% if medicines %}
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                {% for med in medicines %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm rounded-3">
+
+                            {% if med.image %}
+                                <img src="{{ med.image.url }}" class="card-img-top" 
+                                     style="height:160px; object-fit:cover; border-radius: 0.75rem 0.75rem 0 0;">
+                            {% endif %}
+
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-semibold">{{ med.name }}</h5>
+                                <p class="card-text text-success fw-semibold">$ {{ med.price }}</p>
+
+                                <!-- Edit/Delete Buttons -->
+                                <div class="d-flex justify-content-center gap-2 mt-2">
+                                    <a href="{% url 'edit_medicine' med.id %}" class="btn btn-warning btn-sm fw-semibold">
+                                        Edit
+                                    </a>
+                                    <a href="{% url 'delete_medicine' med.id %}" class="btn btn-danger btn-sm fw-semibold">
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">No medicines added yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<style>
+    .btn-primary:hover { background-color: #0056b3; }
+    .btn-warning:hover { background-color: #e0a800; }
+    .btn-danger:hover { background-color: #c82333; }
+</style>
+
+{% endblock %}
