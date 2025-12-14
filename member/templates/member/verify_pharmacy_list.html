@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Pharmacies</title>
+</head>
+<body>
+
+<h2>Pending Pharmacy Verifications</h2>
+
+<table border="1">
+    <tr>
+        <th>Pharmacy Name</th>
+        <th>User</th>
+        <th>Location</th>
+        <th>Phone</th>
+        <th>Document</th>
+        <th>Action</th>
+    </tr>
+    {% for pharmacy in pharmacies %}
+    <tr>
+        <td>{{ pharmacy.pharmacy_name }}</td>
+        <td>{{ pharmacy.user.username }}</td>
+        <td>{{ pharmacy.location }}</td>
+        <td>{{ pharmacy.phone }}</td>
+        <td>
+            <a href="{{ pharmacy.verification_document.url }}" target="_blank">View Document</a>
+        </td>
+        <td>
+            <a href="{% url 'approve_pharmacy' pharmacy.id %}">Approve</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6">No pending pharmacies.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

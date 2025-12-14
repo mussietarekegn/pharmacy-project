@@ -1,0 +1,57 @@
+{% extends "member/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 style="text-align: center; margin-bottom: 30px; font-weight: 700; letter-spacing: 1px;">
+        Available Medicines
+    </h2>
+
+    {% if medicines %}
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        ">
+
+            {% for med in medicines %}
+            <div style="
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                text-align: center;
+                transition: 0.3s;
+            ">
+
+                <img src="{{ med.image.url }}" 
+                     style="width: 120px; height:120px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
+
+                <h4 style="font-weight: 600; margin-bottom: 5px;">
+                    {{ med.name }}
+                </h4>
+
+                <p style="margin: 0; font-size: 17px; color: #28a745; font-weight: 600;">
+                    ${{ med.price }}
+                </p>
+
+                <p style="font-size: 14px; color: #555; margin-top: 10px;">
+                    {{ med.description }}
+                </p>
+
+                <p style="font-size: 13px; color: #888; margin-top: 10px;">
+                    <strong>Pharmacy:</strong> {{ med.owner.pharmacy_name }}
+                </p>
+
+            </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <p style="text-align:center; margin-top: 20px;">No medicines found.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
